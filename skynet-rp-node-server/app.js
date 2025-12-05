@@ -1,11 +1,23 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const session = require('express-session');
+const methodOverride = require('method-override');
 const Puppy = require('./models/Puppy');
+const User = require('./models/User');
 
 const app = express();
 const port = 3000;
 
 mongoose.connect('mongodb://localhost:27017/rainbow-puppies', { useNewUrlParser: true, useUnifiedTopology: true });
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(methodOverride('_method'));
+app.use(session({
+  secret: 'your-secret-key',
+  resave: false,
+  saveUninitialized: false
+}));
 
 app.get('/', (req, res) => {
   res.send('<h1>Welcome to Rainbow Puppies App</h1>');
